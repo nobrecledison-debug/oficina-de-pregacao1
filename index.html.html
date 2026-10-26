@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0b1020">
+<title>Oficina de Pregação 11.0 — Suíte Homilética Mobile</title>
+<style>
+:root {
+  --bg: #080d19;
+  --panel: #111a2b;
+  --panel2: #172238;
+  --line: #293650;
+  --gold: #f3bd55;
+  --gold-dark: #c98724;
+  --text: #edf2fa;
+  --muted: #a6b3c8;
+  --green: #7ed6b0;
+  --red: #ff6b6b;
+  --card-bg: #0a1120;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0;
+  background: #080d19;
+  color: var(--text);
+  font: 16px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  padding-bottom: 30px;
+}
+
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(8, 13, 25, 0.98);
+  border-bottom: 1px solid var(--line);
+  backdrop-filter: blur(10px);
+  padding: 10px 14px;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.brand { display: flex; align-items: center; gap: 8px; }
+.logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #f8d88c, #c98724);
+  display: grid;
+  place-items: center;
+  color: #141a28;
+  font-size: 16px;
+  font-weight: bold;
+}
+.brand h1 { margin: 0; font-size: 15px; letter-spacing: .02em; color: #fff; font-weight: 700; }
+
+.header-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.wrap {
+  max-width: 1200px;
+  margin: 10px auto 0;
+  padding: 0 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+/* SELEÇÃO BÍBLICA VISÍVEL NO TOPO */
+.bible-sticky-bar {
+  background: #0d1626;
+  border: 1px solid var(--gold-dark);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.bible-sticky-bar .bar-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+
+/* Modo Emergência Discreto */
+.emergency-toggle-btn {
+  background: rgba(243, 189, 85, 0.1);
+  border: 1px solid rgba(243, 189, 85, 0.3);
+  color: var(--gold);
+  border-radius: 20px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.emergency-box {
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid var(--gold-dark);
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.subhead {
+  color: var(--gold);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 10px 0 6px;
+}
+
+.field { margin-bottom: 8px; }
+.field label {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+input, select, textarea {
+  width: 100%;
+  border: 1px solid #2a374e;
+  border-radius: 8px;
+  background: #0a1120;
+  color: var(--text);
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 16px;
+  outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: var(--gold); }
+
+.verse-separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--gold);
+  font-weight: bold;
+  font-size: 18px;
+  padding-top: 20px;
+}
+
+.btn {
+  border: 1px solid #3c4c68;
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  background: #1b2940;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 42px;
+}
+.btn:active { transform: scale(0.98); }
+.btn.gold { background: var(--gold); border-color: var(--gold); color: #141a28; }
+.btn.danger { background: #d93838; border-color: #d93838; color: #fff; }
+.btn.ghost { background: transparent; border-color: #2a374e; color: var(--muted); padding: 6px 10px; min-height: 36px; font-size: 12px; }
+.btn-large { width: 100%; padding: 12px; font-size: 15px; }
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid #4c432b;
+  color: #f6d99a;
+  background: rgba(75, 56, 28, 0.4);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.grid-verses { display: grid; grid-template-columns: 1fr 20px 1fr; gap: 6px; align-items: start; }
+
+/* Tabs Mobile */
+.main-tabs {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 6px;
+  margin-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.main-tabs::-webkit-scrollbar { display: none; }
+
+.tab-btn {
+  background: #0a1120;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.tab-btn.active {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #141a28;
+}
+
+/* Visão Geral & Exegese */
+.hero-card {
+  background: linear-gradient(135deg, #162035, #0a1120);
+  border: 1px solid #2a3852;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.hero-card h2 { margin: 6px 0; font-family: Georgia, serif; font-size: 20px; color: var(--gold); }
+.hero-meta { display: flex; gap: 10px; color: var(--muted); font-size: 12px; flex-wrap: wrap; }
+
+.info-card {
+  background: #0a1120;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+.info-card h4 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; color: var(--gold); letter-spacing: 0.05em; }
+.info-card p { margin: 0; font-size: 14px; color: #d2dbea; line-height: 1.5; }
+
+.greek-grid { display: flex; flex-direction: column; gap: 8px; }
+.greek-card {
+  background: #0a1120;
+  border: 1px solid #24324a;
+  border-radius: 8px;
+  padding: 10px;
+}
+.greek-title { display: flex; justify-content: space-between; font-weight: bold; font-size: 13px; color: var(--gold); margin-bottom: 4px; }
+.greek-desc { font-size: 13px; color: #b0bfd6; line-height: 1.4; }
+
+/* Púlpito Digital Mobile */
+.pulpit-toolbar {
+  background: #0a1120;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.pulpit-tool-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+}
+
+.pulpit-content {
+  background: #050811;
+  border: 1px solid #1a2538;
+  border-radius: 10px;
+  padding: 16px;
+  font-family: Georgia, serif;
+  font-size: 20px;
+  line-height: 1.75;
+  color: #f1f5f9;
+  max-height: 60vh;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  scroll-behavior: smooth;
+}
+
+.scroll-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  width: 100%;
+  background: #0d1626;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+}
+.scroll-control input[type=range] {
+  flex: 1;
+  accent-color: var(--gold);
+  height: 24px;
+}
+
+.speed-badge {
+  background: rgba(243, 189, 85, 0.15);
+  color: var(--gold);
+  border: 1px solid rgba(243, 189, 85, 0.3);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-weight: 700;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.verse {
+  padding: 10px 12px;
+  border: 1px solid #2a374e;
+  background: #0a1120;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+.verse .vref { color: var(--gold); font-weight: 800; font-size: 12px; margin-bottom: 2px; }
+.verse p { font-family: Georgia, serif; font-size: 15px; margin: 0; }
+
+.hidden { display: none !important; }
+.status-bar { font-size: 12px; color: var(--muted); margin-top: 8px; text-align: center; }
+
+details summary {
+  cursor: pointer;
+  user-select: none;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <div class="brand">
+      <div class="logo">✝</div>
+      <div>
+        <h1>OFICINA 11.0</h1>
+      </div>
+    </div>
+    <div class="header-actions">
+      <!-- BOTÃO DISCRETO DE EMERGÊNCIA -->
+      <button class="emergency-toggle-btn" id="toggleEmergencyBtn">🚨 Emergência</button>
+      <button class="btn gold" id="readTabBtn">🔊 Ouvir Aba</button>
+      <button class="btn ghost" id="stopAudioBtn" style="display:none;">⏹️ Parar</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- CARD DE EMERGÊNCIA DISCRETO E COLAPSÁVEL -->
+  <div class="emergency-box hidden" id="emergencyBox">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+      <span style="font-size:12px; font-weight:bold; color:var(--gold);">🚨 MODO DE EMERGÊNCIA</span>
+      <button class="btn ghost" id="closeEmergencyBtn">✕ Fechar</button>
+    </div>
+    <div class="field">
+      <select id="emergencyTopic">
+        <optgroup label="🔥 EVANGELÍSTICOS">
+          <option value="João 3:16 - O Amor Incondicional de Deus e a Salvação">João 3:16 — O Amor Supremo</option>
+          <option value="Lucas 15:11-32 - O Filho Pródigo e o Abraço do Pai">Lucas 15 — O Pai de Misericórdia</option>
+          <option value="Atos 16:30-31 - Que devo fazer para ser salvo?">Atos 16 — O Caminho da Salvação</option>
+        </optgroup>
+        <optgroup label="🛡️ PASTORAIS & CONSOLO">
+          <option value="Salmo 23 - O Senhor é o meu Pastor; nada me faltará">Salmo 23 — O Cuidado de Deus</option>
+          <option value="Isaías 40:29-31 - Renovando as Forças no Cansaço">Isaías 40 — Forças para o Cansado</option>
+          <option value="Filipenses 4:6-7 - A Paz que Excede Todo o Entendimento">Filipenses 4 — Vencendo a Ansiedade</option>
+        </optgroup>
+        <optgroup label="⚔️ BATALHA & RESTAURAÇÃO">
+          <option value="Efésios 6:10-18 - A Armadura de Deus no Dia Mau">Efésios 6 — A Armadura Espiritual</option>
+          <option value="Romanos 8:31-39 - Se Deus é por nós, quem será contra nós?">Romanos 8 — Mais que Vencedores</option>
+        </optgroup>
+      </select>
+    </div>
+    <button class="btn danger btn-large" id="emergencyBtn">⚡ GERAR RÁPIDO</button>
+  </div>
+
+  <!-- SELEÇÃO BÍBLICA COM DOIS QUADRADOS PARA VERSÍCULOS -->
+  <section class="bible-sticky-bar">
+    <div class="bar-title">
+      <span>📖 Seleção Bíblica (Carregamento Automático)</span>
+      <span class="pill" style="font-size:9px;">ARC</span>
+    </div>
+    
+    <div class="grid2">
+      <div class="field">
+        <label for="bookSelect">Livro</label>
+        <select id="bookSelect"><option value="">Carregando...</option></select>
+      </div>
+      <div class="field">
+        <label for="chapterInput">Capítulo</label>
+        <input type="number" id="chapterInput" value="23" min="1">
+      </div>
+    </div>
+
+    <!-- ESTRUTURA DOS DOIS QUADRADOS DE VERSÍCULOS -->
+    <div class="field" style="margin-bottom:0;">
+      <label>Versículos (Inicial até Final)</label>
+      <div class="grid-verses">
+        <div>
+          <input type="number" id="verseStartInput" placeholder="1" min="1" style="text-align: center;">
+        </div>
+        <div class="verse-separator">à</div>
+        <div>
+          <input type="number" id="verseEndInput" placeholder="..." min="1" style="text-align: center;">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIGURAÇÕES ADICIONAIS DO GEMINI (EXPANSÍVEL) -->
+  <details class="panel">
+    <summary style="font-weight:bold; font-size:14px; color:var(--gold);">⚙️ Opções do Sermão & Gemini Key</summary>
+    <div style="margin-top:12px;">
+
+      <div class="grid2">
+        <div class="field">
+          <label for="genreSelect">Modalidade</label>
+          <select id="genreSelect">
+            <option value="Expositivo">Expositivo</option>
+            <option value="Textual">Textual</option>
+            <option value="Temático">Temático</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="levelSelect">Nível</label>
+          <select id="levelSelect">
+            <option value="Iniciante">Iniciante</option>
+            <option value="Intermediário" selected>Intermediário</option>
+            <option value="Profissional">Exegético</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="preacherStyle">Estilo Homilético</label>
+        <select id="preacherStyle">
+          <option value="C.H. Spurgeon (Pastoral & Fervoroso)">C.H. Spurgeon (Pastoral)</option>
+          <option value="John Stott (Expositivo & Estruturado)">John Stott (Expositivo)</option>
+          <option value="D. Martyn Lloyd-Jones (Analítico & Denso)">Lloyd-Jones (Analítico)</option>
+          <option value="Tim Keller (Apologético Prático)">Tim Keller (Prático)</option>
+        </select>
+      </div>
+
+      <div class="grid2">
+        <div class="field">
+          <label for="toneSelect">Tom Pastoral</label>
+          <select id="toneSelect">
+            <option value="Encorajador / Consolador">Encorajador</option>
+            <option value="Exortativo e Solene">Exortativo</option>
+            <option value="Evangelístico Convidativo">Evangelístico</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="timeSelect">Duração</label>
+          <select id="timeSelect">
+            <option value="15 min">15 min</option>
+            <option value="25 min" selected>25 min</option>
+            <option value="40 min">40 min</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="apiKeyInput">Gemini API Key</label>
+        <input type="password" id="apiKeyInput" placeholder="Cole sua chave AIzaSy...">
+      </div>
+
+    </div>
+  </details>
+
+  <button class="btn gold btn-large" id="generateBtn">✨ Gerar Sermão Completo</button>
+
+  <!-- NAVEGAÇÃO POR ABAS -->
+  <div class="main-tabs">
+    <button class="tab-btn active" data-tab="tab-pulpit">🖥️ Púlpito Digital</button>
+    <button class="tab-btn" data-tab="tab-overview">📊 Introdução & Exegese</button>
+    <button class="tab-btn" data-tab="tab-outline">📑 Esboço</button>
+    <button class="tab-btn" data-tab="tab-bible">📖 Texto ARC</button>
+  </div>
+
+  <!-- CONTEÚDO PRINCIPAL (EXIBIÇÃO EM ABAS) -->
+  <section class="panel">
+
+    <!-- ABA 1: PÚLPITO DIGITAL -->
+    <div id="tab-pulpit">
+      <div class="pulpit-toolbar">
+        <div class="pulpit-tool-row">
+          <div style="display:flex;gap:4px;align-items:center;">
+            <span style="font-size:11px; color:var(--muted);">Fonte:</span>
+            <button class="btn ghost" onclick="adjustPulpitFont(-2)">-A</button>
+            <button class="btn ghost" onclick="adjustPulpitFont(2)">+A</button>
+          </div>
+          <button class="btn gold" id="autoScrollBtn" style="min-height:34px; font-size:12px; padding: 6px 14px;">▶ Auto-Scroll</button>
+        </div>
+
+        <!-- CONTROLE DE VELOCIDADE LENTA E SUAVE DO AUTO-SCROLL -->
+        <div class="scroll-control">
+          <span>Velocidade:</span>
+          <input type="range" id="scrollSpeed" min="0.1" max="3.0" step="0.1" value="0.3">
+          <span class="speed-badge" id="speedLabel">0.3x (Lento)</span>
+        </div>
+      </div>
+
+      <div class="pulpit-content" id="pulpitText">
+[Aguardando Sermão...]
+
+Para gerar uma mensagem:
+1. Altere o Livro, Capítulo ou digite nos dois campos de Versículos (Texto ARC é carregado automaticamente!).
+2. Insira sua Gemini API Key em "Opções do Sermão".
+3. Clique em "Gerar Sermão Completo".
+      </div>
+    </div>
+
+    <!-- ABA 2: INTRODUÇÃO & EXEGESE -->
+    <div id="tab-overview" class="hidden">
+      <div class="hero-card">
+        <span class="pill" id="cardGenre">Expositivo</span>
+        <h2 id="cardTitle">O SENHOR É O MEU PASTOR</h2>
+        <div class="hero-meta">
+          <span id="cardRef">Salmo 23:1-6</span> • <span>ARC</span>
+        </div>
+      </div>
+
+      <div class="info-card">
+        <h4>🎯 PROPOSIÇÃO TEOLÓGICA</h4>
+        <p id="propText">A suficiência do cuidado pastoral de Deus garante provisão e paz em qualquer circunstância.</p>
+      </div>
+      <div class="info-card">
+        <h4>🔥 FRASE MESTRA</h4>
+        <p id="objText">"Com o Senhor no comando, o que falta na Terra sobra do Céu."</p>
+      </div>
+
+      <div class="info-card">
+        <h4>✍️ AUTOR E AUTORIA</h4>
+        <p id="authorText">Davi, rei de Israel e ex-pastor de ovelhas, escrevendo sob inspiração do Espírito Santo com experiência prática do cuidado de um rebanho.</p>
+      </div>
+
+      <div class="info-card">
+        <h4>🏛️ CONTEXTO HISTÓRICO & GEOGRÁFICO</h4>
+        <p id="contextText">Escrito na antiga Judeia, uma região árida onde pastores precisavam conduzir ovelhas por vales profundos e encostas perigosas.</p>
+      </div>
+
+      <div class="info-card">
+        <h4>👥 DESTINATÁRIOS ORIGINAIS</h4>
+        <p id="audienceText">O povo de Israel em tempos de aflição, reavivando a memória da aliança de Deus como o Verdadeiro Rei e Pastor do Seu povo.</p>
+      </div>
+
+      <div class="info-card">
+        <h4>🏁 PROPÓSITO TEOLÓGICO FINAL</h4>
+        <p id="purposeText">Demonstrar a fidelidade da aliança de Javé, guiando o crente da dependência terrena para a adoration e confiança eterna na Sua casa.</p>
+      </div>
+
+      <div class="subhead">🔤 CHAVES EXEGÉTICAS</div>
+      <div class="greek-grid" id="greekContainer">
+        <div class="greek-card">
+          <div class="greek-title"><span>Jehovah-Rohi (יְהוָה רֹעִי)</span><span class="pill">Hebraico</span></div>
+          <div class="greek-desc">"O Senhor é o meu pastor". Relação pessoal, possessiva e de cuidado ininterrupto.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ABA 3: ESBOÇO ESTRUTURADO -->
+    <div id="tab-outline" class="hidden">
+      <div class="subhead">📑 ESTRUTURA HOMILÉTICA</div>
+      <div id="outlineContainer">
+        <div class="verse"><p><strong>I. INTRODUÇÃO:</strong> A busca humana por segurança e descanso espiritual.</p></div>
+        <div class="verse"><p><strong>1. PROVISÃO COMPLETA (v.1):</strong> A certeza da suficiência de Deus.</p></div>
+        <div class="verse"><p><strong>2. RESTAURAÇÃO DA ALMA (v.2-3):</strong> O descanso e a condução em veredas corretas.</p></div>
+        <div class="verse"><p><strong>3. PRESENÇA NO VALE (v.4):</strong> A vitória sobre o medo na escuridão.</p></div>
+        <div class="verse"><p><strong>CONCLUSÃO:</strong> O convite para habitar na casa do Senhor para sempre.</p></div>
+      </div>
+    </div>
+
+    <!-- ABA 4: BÍBLIA INTEGRADA -->
+    <div id="tab-bible" class="hidden">
+      <div class="subhead">📖 TEXTO COMPLETO (ARC)</div>
+      <div id="verseList"></div>
+    </div>
+
+    <div class="status-bar" id="statusMsg">Pronto para uso.</div>
+  </section>
+</main>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+
+let bibleDb = null;
+let currentVersesText = "";
+let currentRef = "Salmo 23:1-6";
+let currentPulpitFontSize = 20;
+
+// Auto-scroll ultra suave de alta precisão
+let isScrolling = false;
+let scrollAnimationFrame = null;
+let scrollAccumulator = 0;
+
+let activeTabId = "tab-pulpit";
+
+// Web Speech API
+let synth = window.speechSynthesis;
+let currentSpeech = null;
+
+// Modais de emergência
+$('toggleEmergencyBtn').addEventListener('click', () => {
+  $('emergencyBox').classList.toggle('hidden');
+});
+$('closeEmergencyBtn').addEventListener('click', () => {
+  $('emergencyBox').classList.add('hidden');
+});
+
+// Carregar Bíblia ARC
+async function loadBibleDatabase() {
+  try {
+    const res = await fetch('https://raw.githubusercontent.com/MaatheusGois/bible/main/versions/pt-br/arc.json');
+    bibleDb = await res.json();
+    populateBooks();
+    fetchBibleTextAuto();
+    $('statusMsg').textContent = 'Bíblia ARC carregada automaticamente!';
+  } catch(e) {
+    $('statusMsg').textContent = 'Conectado no modo manual.';
+  }
+}
+
+function populateBooks() {
+  const sel = $('bookSelect');
+  sel.innerHTML = '';
+  bibleDb.forEach((b, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    opt.textContent = b.name;
+    if(b.name === 'Salmos' || b.name === 'Salmo') opt.selected = true;
+    sel.appendChild(opt);
+  });
+}
+
+// Carregamento automático do Texto Bíblico considerando os dois campos
+function fetchBibleTextAuto() {
+  if(!bibleDb) return;
+  const bookIdx = $('bookSelect').value || 18;
+  const book = bibleDb[bookIdx];
+  if(!book) return;
+
+  let cap = parseInt($('chapterInput').value) - 1;
+  if(isNaN(cap) || cap < 0) cap = 0;
+  if(cap >= book.chapters.length) cap = book.chapters.length - 1;
+  $('chapterInput').value = cap + 1;
+
+  const versesArray = book.chapters[cap];
+  const maxVerses = versesArray.length;
+
+  // Lógica dos dois quadrados
+  const startVal = parseInt($('verseStartInput').value);
+  const endVal = parseInt($('verseEndInput').value);
+
+  // Se o primeiro estiver vazio, assume 1
+  let startVerse = isNaN(startVal) || startVal < 1 ? 1 : Math.min(startVal, maxVerses);
+  // Se o segundo estiver vazio, assume o último versículo
+  let endVerse = isNaN(endVal) || endVal < 1 ? maxVerses : Math.min(endVal, maxVerses);
+
+  // Garante ordem coerente
+  if(startVerse > endVerse) {
+    endVerse = startVerse;
+  }
+
+  let selected = [];
+  for(let i = startVerse; i <= endVerse; i++) {
+    if(versesArray[i - 1]) {
+      selected.push({ num: i, text: versesArray[i - 1] });
+    }
+  }
+
+  const rangeLabel = (startVerse === 1 && endVerse === maxVerses) 
+    ? `1-${maxVerses}` 
+    : (startVerse === endVerse ? `${startVerse}` : `${startVerse}-${endVerse}`);
+
+  currentRef = `${book.name} ${cap + 1}:${rangeLabel}`;
+  currentVersesText = selected.map(v => `${book.name} ${cap + 1}:${v.num} | ${v.text}`).join('\n');
+
+  $('verseList').innerHTML = selected.map(v => `
+    <div class="verse">
+      <div class="vref">${book.name} ${cap + 1}:${v.num}</div>
+      <p>${v.text}</p>
+    </div>
+  `).join('');
+
+  $('cardRef').textContent = currentRef;
+}
+
+// Event Listeners para acionamento AUTOMÁTICO instantâneo
+$('bookSelect').addEventListener('change', fetchBibleTextAuto);
+$('chapterInput').addEventListener('input', fetchBibleTextAuto);
+$('verseStartInput').addEventListener('input', fetchBibleTextAuto);
+$('verseEndInput').addEventListener('input', fetchBibleTextAuto);
+
+// Controle de Abas
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    $('tab-overview').classList.add('hidden');
+    $('tab-outline').classList.add('hidden');
+    $('tab-pulpit').classList.add('hidden');
+    $('tab-bible').classList.add('hidden');
+    
+    activeTabId = btn.dataset.tab;
+    $(activeTabId).classList.remove('hidden');
+
+    // Interrompe o áudio ao mudar de aba
+    if(synth.speaking) {
+      synth.cancel();
+      $('stopAudioBtn').style.display = 'none';
+      $('readTabBtn').textContent = '🔊 Ouvir Aba';
+    }
+  });
+});
+
+function adjustPulpitFont(delta) {
+  currentPulpitFontSize = Math.max(16, Math.min(36, currentPulpitFontSize + delta));
+  $('pulpitText').style.fontSize = currentPulpitFontSize + 'px';
+}
+
+// AUTO-SCROLL ULTRA SUAVE E LENTO COM SUB-PIXEL ROTATION
+function performSmoothScroll() {
+  if (!isScrolling) return;
+
+  const pulpit = $('pulpitText');
+  const speed = parseFloat($('scrollSpeed').value) || 0.3;
+
+  // Acumulador fracionado para rolar de forma fluida a menos de 1px por frame se necessário
+  scrollAccumulator += speed;
+
+  if (scrollAccumulator >= 1) {
+    const pixelsToScroll = Math.floor(scrollAccumulator);
+    pulpit.scrollTop += pixelsToScroll;
+    scrollAccumulator -= pixelsToScroll;
+  }
+
+  // Verifica se chegou ao fim da leitura
+  if (pulpit.scrollTop + pulpit.clientHeight >= pulpit.scrollHeight - 2) {
+    stopAutoScroll();
+    return;
+  }
+
+  scrollAnimationFrame = requestAnimationFrame(performSmoothScroll);
+}
+
+function startAutoScroll() {
+  isScrolling = true;
+  scrollAccumulator = 0;
+  $('autoScrollBtn').textContent = '⏸️ Pausar';
+  scrollAnimationFrame = requestAnimationFrame(performSmoothScroll);
+}
+
+function stopAutoScroll() {
+  isScrolling = false;
+  if (scrollAnimationFrame) {
+    cancelAnimationFrame(scrollAnimationFrame);
+    scrollAnimationFrame = null;
+  }
+  $('autoScrollBtn').textContent = '▶ Auto-Scroll';
+}
+
+$('autoScrollBtn').addEventListener('click', () => {
+  if (isScrolling) {
+    stopAutoScroll();
+  } else {
+    startAutoScroll();
+  }
+});
+
+// Atualiza indicação visual de velocidade
+$('scrollSpeed').addEventListener('input', (e) => {
+  const val = parseFloat(e.target.value).toFixed(1);
+  let label = `${val}x`;
+  if (val <= 0.3) label += ' (Muito Lento)';
+  else if (val <= 0.8) label += ' (Lento)';
+  else if (val <= 1.5) label += ' (Médio)';
+  else label += ' (Rápido)';
+
+  $('speedLabel').textContent = label;
+});
+
+// LEITURA EM VOZ ALTA APENAS DA ABA DESTACADA/VISÍVEL
+$('readTabBtn').addEventListener('click', () => {
+  if(synth.speaking) {
+    synth.cancel();
+  }
+
+  let textToRead = "";
+
+  if(activeTabId === 'tab-pulpit') {
+    textToRead = "Manuscrito do Púlpito: " + $('pulpitText').textContent;
+  } else if(activeTabId === 'tab-overview') {
+    textToRead = `
+      Introdução e Exegese.
+      Título: ${$('cardTitle').textContent}.
+      Referência: ${$('cardRef').textContent}.
+      Proposição Teológica: ${$('propText').textContent}.
+      Frase Mestra: ${$('objText').textContent}.
+      Autor e Autoria: ${$('authorText').textContent}.
+      Contexto Histórico: ${$('contextText').textContent}.
+      Destinatários: ${$('audienceText').textContent}.
+      Propósito Teológico Final: ${$('purposeText').textContent}.
+      Chaves Exegéticas: ${$('greekContainer').textContent}.
+    `;
+  } else if(activeTabId === 'tab-outline') {
+    textToRead = "Esboço Homilético: " + $('outlineContainer').textContent;
+  } else if(activeTabId === 'tab-bible') {
+    textToRead = "Texto Bíblico: " + $('verseList').textContent;
+  }
+
+  if(!textToRead.trim()) return;
+
+  currentSpeech = new SpeechSynthesisUtterance(textToRead);
+  currentSpeech.lang = 'pt-BR';
+  currentSpeech.rate = 1.0;
+
+  currentSpeech.onstart = () => {
+    $('stopAudioBtn').style.display = 'inline-flex';
+    $('readTabBtn').textContent = '🔊 Lendo...';
+  };
+
+  currentSpeech.onend = () => {
+    $('stopAudioBtn').style.display = 'none';
+    $('readTabBtn').textContent = '🔊 Ouvir Aba';
+  };
+
+  synth.speak(currentSpeech);
+});
+
+$('stopAudioBtn').addEventListener('click', () => {
+  synth.cancel();
+  $('stopAudioBtn').style.display = 'none';
+  $('readTabBtn').textContent = '🔊 Ouvir Aba';
+});
+
+// GERAR SERMÃO DE EMERGÊNCIA OU COMPLETO
+$('emergencyBtn').addEventListener('click', () => {
+  const topic = $('emergencyTopic').value;
+  $('emergencyBox').classList.add('hidden');
+  runAiGeneration(topic, true);
+});
+
+$('generateBtn').addEventListener('click', () => {
+  runAiGeneration(currentRef, false);
+});
+
+async function runAiGeneration(passage, isEmergency) {
+  const apiKey = $('apiKeyInput').value.trim();
+  if(!apiKey) {
+    alert('Por favor, informe sua Gemini API Key em "Opções do Sermão".');
+    return;
+  }
+
+  const level = $('levelSelect').value;
+  const genre = $('genreSelect').value;
+  const style = $('preacherStyle').value;
+  const tone = $('toneSelect').value;
+  const duration = $('timeSelect').value;
+
+  $('statusMsg').textContent = 'Processando exegese com Gemini...';
+  
+  // Troca automaticamente para a aba Púlpito
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn')[0].classList.add('active');
+  activeTabId = 'tab-pulpit';
+  $('tab-pulpit').classList.remove('hidden');
+  $('tab-overview').classList.add('hidden');
+  $('tab-outline').classList.add('hidden');
+  $('tab-bible').classList.add('hidden');
+
+  $('pulpitText').textContent = "⏳ ELABORANDO MENSAGEM... POR FAVOR, AGUARDE.";
+
+  const prompt = `Você é um doutor em Homilética Exegética e Teologia Reformada. Monte um sermão estruturado e completo na tradução Almeida Revista e Corrigida (ARC).
+
+PARAMETROS:
+- Passagem/Tema: ${passage}
+- Modalidade: ${genre}
+- Nível Teológico: ${level}
+- Estilo: ${style}
+- Tom: ${tone}
+- Duração: ${duration}
+${isEmergency ? '- FORMATO DE EMERGÊNCIA: Mensagem urgente, fluida e marcante para ser pregada no altar imediatamente.' : ''}
+
+REQUISITOS ESTRUTURAIS OBRIGATÓRIOS:
+Retorne um JSON ESTRUTURADO exatamente no formato (sem markdown fora do JSON):
+{
+  "titulo": "Título Homilético Atraente",
+  "proposicao": "Ideia Central Teológica em 1 Frase",
+  "fraseMestra": "Frase de Impacto para a Igreja Memorizar",
+  "autor": "Análise detalhada do Autor e Autoria do livro bíblico",
+  "contextoHistorico": "Contexto histórico, sociocultural e geográfico abrangente",
+  "destinatarios": "Destinatários originais e a ocasião do escrito",
+  "propositoFinal": "Propósito teológico final do livro e da passagem",
+  "chavesExegeticas": [
+    {"termo": "Termo Original (Grego/Hebraico)", "transliteracao": "Transleração", "significado": "Significado e aplicação exegética"}
+  ],
+  "esboco": [
+    {"titulo": "Ponto I", "textoChave": "Versículo relativo", "topicos": ["Subponto A", "Subponto B"]}
+  ],
+  "manuscritoPulpito": "Manuscrito completo em texto corrido e fluido para leitura no Púlpito Digital, contendo Introdução com gancho, 3 Pontos desenvolvidos com profundidade adaptada ao nível ${level}, e Conclusão com apelo pastoral."
+}`;
+
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key=${apiKey}`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+    });
+
+    const data = await res.json();
+    if(data.error) throw new Error(data.error.message);
+
+    const rawText = data.candidates[0].content.parts[0].text;
+    const cleanJson = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+    const result = JSON.parse(cleanJson);
+
+    // Atualizar Púlpito e Abas
+    $('pulpitText').textContent = result.manuscritoPulpito;
+    $('cardTitle').textContent = result.titulo;
+    $('propText').textContent = result.proposicao;
+    $('objText').textContent = result.fraseMestra;
+
+    $('authorText').textContent = result.autor;
+    $('contextText').textContent = result.contextoHistorico;
+    $('audienceText').textContent = result.destinatarios;
+    $('purposeText').textContent = result.propositoFinal;
+
+    // Chaves Exegéticas
+    $('greekContainer').innerHTML = result.chavesExegeticas.map(item => `
+      <div class="greek-card">
+        <div class="greek-title"><span>${item.termo}</span><span class="pill">${item.transliteracao}</span></div>
+        <div class="greek-desc">${item.significado}</div>
+      </div>
+    `).join('');
+
+    // Esboço
+    $('outlineContainer').innerHTML = result.esboco.map(item => `
+      <div class="verse">
+        <p><strong>${item.titulo}:</strong> "${item.textoChave}"</p>
+        <ul style="margin:4px 0 0; padding-left:18px; font-size:13px; color:#c4d2e6;">
+          ${item.topicos.map(t => `<li>${t}</li>`).join('')}
+        </ul>
+      </div>
+    `).join('');
+
+    $('statusMsg').textContent = 'Sermão gerado com sucesso!';
+  } catch(err) {
+    $('pulpitText').textContent = "Erro ao gerar sermão: " + err.message;
+    $('statusMsg').textContent = 'Erro de geração.';
+  }
+}
+
+// Inicialização
+loadBibleDatabase();
+</script>
+</body>
+</html>
